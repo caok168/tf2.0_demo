@@ -17,8 +17,8 @@ for module in mpl, np, pd, sklearn, tf, keras:
     print(module.__name__, module.__version__)
 
 
-
 source_dir = "./generate_csv/"
+
 
 def get_filenames_by_prefix(source_dir, prefix_name):
     all_files = os.listdir(source_dir)
@@ -27,6 +27,7 @@ def get_filenames_by_prefix(source_dir, prefix_name):
         if filename.startswith(prefix_name):
             results.append(os.path.join(source_dir, filename))
     return results
+
 
 train_filenames = get_filenames_by_prefix(source_dir, "train")
 valid_filenames = get_filenames_by_prefix(source_dir, "valid")
@@ -45,6 +46,7 @@ def parse_csv_line(line, n_fields = 9):
     y = tf.stack(parsed_fields[-1:])
     return x, y
 
+
 def csv_reader_dataset(filenames, n_readers=5,
                        batch_size=32, n_parse_threads=5,
                        shuffle_buffer_size=10000):
@@ -60,34 +62,36 @@ def csv_reader_dataset(filenames, n_readers=5,
     dataset = dataset.batch(batch_size)
     return dataset
 
+
 batch_size = 32
 train_set = csv_reader_dataset(train_filenames,
-                               batch_size = batch_size)
+                               batch_size=batch_size)
 valid_set = csv_reader_dataset(valid_filenames,
-                               batch_size = batch_size)
+                               batch_size=batch_size)
 test_set = csv_reader_dataset(test_filenames,
-                              batch_size = batch_size)
+                              batch_size=batch_size)
 
 
 def serialize_example(x, y):
     """Converts x, y to tf.train.Example and serialize"""
-    input_feautres = tf.train.FloatList(value = x)
-    label = tf.train.FloatList(value = y)
+    input_feautres = tf.train.FloatList(value=x)
+    label = tf.train.FloatList(value=y)
     features = tf.train.Features(
         feature = {
             "input_features": tf.train.Feature(
-                float_list = input_feautres),
-            "label": tf.train.Feature(float_list = label)
+                float_list=input_feautres),
+            "label": tf.train.Feature(float_list=label)
         }
     )
-    example = tf.train.Example(features = features)
+    example = tf.train.Example(features=features)
     return example.SerializeToString()
+
 
 def csv_dataset_to_tfrecords(base_filename, dataset,
                              n_shards, steps_per_shard,
-                             compression_type = None):
+                             compression_type=None):
     options = tf.io.TFRecordOptions(
-        compression_type = compression_type)
+        compression_type=compression_type)
     all_filenames = []
     for shard_id in range(n_shards):
         filename_fullpath = '{}_{:05d}-of-{:05d}'.format(
@@ -137,13 +141,13 @@ test_basename = os.path.join(output_dir, "test")
 
 train_tfrecord_filenames = csv_dataset_to_tfrecords(
     train_basename, train_set, n_shards, train_steps_per_shard,
-    compression_type = "GZIP")
+    compression_type="GZIP")
 valid_tfrecord_filenames = csv_dataset_to_tfrecords(
     valid_basename, valid_set, n_shards, valid_steps_per_shard,
-    compression_type = "GZIP")
+    compression_type="GZIP")
 test_tfrecord_fielnames = csv_dataset_to_tfrecords(
     test_basename, test_set, n_shards, test_steps_per_shard,
-    compression_type = "GZIP")
+    compression_type="GZIP")
 
 
 pprint.pprint(train_tfrecord_filenames)
@@ -156,10 +160,12 @@ expected_features = {
     "label": tf.io.FixedLenFeature([1], dtype=tf.float32)
 }
 
+
 def parse_example(serialized_example):
     example = tf.io.parse_single_example(serialized_example,
                                          expected_features)
     return example["input_features"], example["label"]
+
 
 def tfrecords_reader_dataset(filenames, n_readers=5,
                              batch_size=32, n_parse_threads=5,
@@ -168,14 +174,15 @@ def tfrecords_reader_dataset(filenames, n_readers=5,
     dataset = dataset.repeat()
     dataset = dataset.interleave(
         lambda filename: tf.data.TFRecordDataset(
-            filename, compression_type = "GZIP"),
-        cycle_length = n_readers
+            filename, compression_type="GZIP"),
+        cycle_length=n_readers
     )
     dataset.shuffle(shuffle_buffer_size)
     dataset = dataset.map(parse_example,
                           num_parallel_calls=n_parse_threads)
     dataset = dataset.batch(batch_size)
     return dataset
+
 
 tfrecords_train = tfrecords_reader_dataset(train_tfrecord_filenames,
                                            batch_size = 3)
@@ -203,11 +210,11 @@ callbacks = [keras.callbacks.EarlyStopping(
     patience=5, min_delta=1e-2)]
 
 history = model.fit(tfrecords_train_set,
-                    validation_data = tfrecords_valid_set,
-                    steps_per_epoch = 11160 // batch_size,
-                    validation_steps = 3870 // batch_size,
-                    epochs = 100,
-                    callbacks = callbacks)
+                    validation_data=tfrecords_valid_set,
+                    steps_per_epoch=11160 // batch_size,
+                    validation_steps=3870 // batch_size,
+                    epochs=100,
+                    callbacks=callbacks)
 
 
-model.evaluate(tfrecords_test_set, steps = 5160 // batch_size)
+model.evaluate(tfrecords_test_set, steps=5160 // batch_size)

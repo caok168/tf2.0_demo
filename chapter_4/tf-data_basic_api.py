@@ -32,9 +32,9 @@ for item in dataset:
 # case: 文件dataset -> 具体数据集
 
 dataset2 = dataset.interleave(
-    lambda v: tf.data.Dataset.from_tensor_slices(v), # map_fn
-    cycle_length = 5, # cycle_length
-    block_length = 5, # block_length
+    lambda v: tf.data.Dataset.from_tensor_slices(v),  # map_fn
+    cycle_length=5,  # cycle_length
+    block_length=5,  # block_length
 )
 for item in dataset2:
     print(item)

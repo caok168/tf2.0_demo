@@ -23,22 +23,22 @@ for module in mpl, np, pd, sklearn, tf, keras:
 
 favorite_books = [name.encode('utf-8')
                   for name in ["machine learning", "cc150"]]
-favorite_books_bytelist = tf.train.BytesList(value = favorite_books)
+favorite_books_bytelist = tf.train.BytesList(value=favorite_books)
 print(favorite_books_bytelist)
 
-hours_floatlist = tf.train.FloatList(value = [15.5, 9.5, 7.0, 8.0])
+hours_floatlist = tf.train.FloatList(value=[15.5, 9.5, 7.0, 8.0])
 print(hours_floatlist)
 
-age_int64list = tf.train.Int64List(value = [42])
+age_int64list = tf.train.Int64List(value=[42])
 print(age_int64list)
 
 features = tf.train.Features(
     feature = {
         "favorite_books": tf.train.Feature(
-            bytes_list = favorite_books_bytelist),
+            bytes_list=favorite_books_bytelist),
         "hours": tf.train.Feature(
-            float_list = hours_floatlist),
-        "age": tf.train.Feature(int64_list = age_int64list),
+            float_list=hours_floatlist),
+        "age": tf.train.Feature(int64_list=age_int64list),
     }
 )
 print(features)
@@ -65,9 +65,9 @@ for serialized_example_tensor in dataset:
 
 
 expected_features = {
-    "favorite_books": tf.io.VarLenFeature(dtype = tf.string),
-    "hours": tf.io.VarLenFeature(dtype = tf.float32),
-    "age": tf.io.FixedLenFeature([], dtype = tf.int64),
+    "favorite_books": tf.io.VarLenFeature(dtype=tf.string),
+    "hours": tf.io.VarLenFeature(dtype=tf.float32),
+    "age": tf.io.FixedLenFeature([], dtype=tf.int64),
 }
 dataset = tf.data.TFRecordDataset([filename_fullpath])
 for serialized_example_tensor in dataset:
@@ -81,14 +81,14 @@ for serialized_example_tensor in dataset:
 
 
 filename_fullpath_zip = filename_fullpath + '.zip'
-options = tf.io.TFRecordOptions(compression_type = "GZIP")
+options = tf.io.TFRecordOptions(compression_type="GZIP")
 with tf.io.TFRecordWriter(filename_fullpath_zip, options) as writer:
     for i in range(3):
         writer.write(serialized_example)
 
 
 dataset_zip = tf.data.TFRecordDataset([filename_fullpath_zip],
-                                      compression_type= "GZIP")
+                                      compression_type="GZIP")
 for serialized_example_tensor in dataset_zip:
     example = tf.io.parse_single_example(
         serialized_example_tensor,
