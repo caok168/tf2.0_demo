@@ -1,6 +1,6 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-%matplotlib inline
+# %matplotlib inline
 import numpy as np
 import sklearn
 import pandas as pd
@@ -66,7 +66,7 @@ callbacks = [
 ]
 history = model.fit(x_train_scaled, y_train, epochs=10,
                     validation_data=(x_valid_scaled, y_valid),
-                    callbacks = callbacks)
+                    callbacks=callbacks)
 
 
 def plot_learning_curves(history):
@@ -74,6 +74,7 @@ def plot_learning_curves(history):
     plt.grid(True)
     plt.gca().set_ylim(0, 3)
     plt.show()
+
 
 plot_learning_curves(history)
 

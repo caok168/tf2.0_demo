@@ -1,6 +1,6 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-%matplotlib inline
+# %matplotlib inline
 import numpy as np
 import sklearn
 import pandas as pd
@@ -26,11 +26,14 @@ print(x_valid.shape, y_valid.shape)
 print(x_train.shape, y_train.shape)
 print(x_test.shape, y_test.shape)
 
+
 def show_single_image(img_arr):
     plt.imshow(img_arr, cmap="binary")
     plt.show()
 
+
 show_single_image(x_train[0])
+
 
 def show_imgs(n_rows, n_cols, x_data, y_data, class_names):
     assert len(x_data) == len(y_data)
@@ -45,6 +48,7 @@ def show_imgs(n_rows, n_cols, x_data, y_data, class_names):
             plt.axis('off')
             plt.title(class_names[y_data[index]])
     plt.show()
+
 
 class_names = ['T-shirt', 'Trouser', 'Pullover', 'Dress',
                'Coat', 'Sandal', 'Shirt', 'Sneaker',
@@ -77,7 +81,7 @@ model.compile(loss="sparse_categorical_crossentropy",
               optimizer = "sgd",
               metrics = ["accuracy"])
 
-model.layers
+print(model.layers)
 
 model.summary()
 
@@ -86,13 +90,15 @@ history = model.fit(x_train, y_train, epochs=10,
 
 type(history)
 
-history.history
+print(history.history)
+
 
 def plot_learning_curves(history):
     pd.DataFrame(history.history).plot(figsize=(8, 5))
     plt.grid(True)
     plt.gca().set_ylim(0, 1)
     plt.show()
+
 
 plot_learning_curves(history)
 

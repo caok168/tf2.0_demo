@@ -1,6 +1,6 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-%matplotlib inline
+# %matplotlib inline
 import numpy as np
 import sklearn
 import pandas as pd
@@ -84,6 +84,7 @@ def plot_learning_curves(history):
     plt.grid(True)
     plt.gca().set_ylim(0, 3)
     plt.show()
+
 
 plot_learning_curves(history)
 
