@@ -62,17 +62,17 @@ print(r[1:2])
 
 # ops on ragged tensor
 r2 = tf.ragged.constant([[51, 52], [], [71]])
-print(tf.concat([r, r2], axis = 0))
+print(tf.concat([r, r2], axis=0))
 
 r3 = tf.ragged.constant([[13, 14], [15], [], [42, 43]])
-print(tf.concat([r, r3], axis = 1))
+print(tf.concat([r, r3], axis=1))
 
 print(r.to_tensor())
 
 # sparse tensor
-s = tf.SparseTensor(indices = [[0, 1], [1, 0], [2, 3]],
-                    values = [1., 2., 3.],
-                    dense_shape = [3, 4])
+s = tf.SparseTensor(indices=[[0, 1], [1, 0], [2, 3]],
+                    values=[1., 2., 3.],
+                    dense_shape=[3, 4])
 print(s)
 print(tf.sparse.to_dense(s))
 
@@ -93,9 +93,9 @@ s4 = tf.constant([[10., 20.],
 print(tf.sparse.sparse_dense_matmul(s, s4))
 
 # sparse tensor
-s5 = tf.SparseTensor(indices = [[0, 2], [0, 1], [2, 3]],
-                    values = [1., 2., 3.],
-                    dense_shape = [3, 4])
+s5 = tf.SparseTensor(indices=[[0, 2], [0, 1], [2, 3]],
+                    values=[1., 2., 3.],
+                    dense_shape=[3, 4])
 print(s5)
 s6 = tf.sparse.reorder(s5)
 print(tf.sparse.to_dense(s6))

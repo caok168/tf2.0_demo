@@ -16,11 +16,13 @@ print(sys.version_info)
 for module in mpl, np, pd, sklearn, tf, keras:
     print(module.__name__, module.__version__)
 
+
 # tf.function and auto-graph.
 def scaled_elu(z, scale=1.0, alpha=1.0):
     # z >= 0 ? scale * z : scale * alpha * tf.nn.elu(z)
     is_positive = tf.greater_equal(z, 0.0)
     return scale * tf.where(is_positive, z, alpha * tf.nn.elu(z))
+
 
 print(scaled_elu(tf.constant(-3.)))
 print(scaled_elu(tf.constant([-3., -2.5])))
@@ -44,6 +46,7 @@ def converge_to_2(n_iters):
         increment /= 2.0
     return total
 
+
 print(converge_to_2(20))
 
 
@@ -58,9 +61,11 @@ display_tf_code(scaled_elu)
 
 var = tf.Variable(0.)
 
+
 @tf.function
 def add_21():
     return var.assign_add(21) # +=
+
 
 print(add_21())
 

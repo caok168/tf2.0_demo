@@ -108,6 +108,8 @@ def plot_learning_curves(history):
     plt.grid(True)
     plt.gca().set_ylim(0, 1)
     plt.show()
+
+
 plot_learning_curves(history)
 
 

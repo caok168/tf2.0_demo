@@ -16,11 +16,14 @@ print(sys.version_info)
 for module in mpl, np, pd, sklearn, tf, keras:
     print(module.__name__, module.__version__)
 
+
 def f(x):
     return 3. * x ** 2 + 2. * x - 1
 
+
 def approximate_derivative(f, x, eps=1e-3):
     return (f(x + eps) - f(x - eps)) / (2. * eps)
+
 
 print(approximate_derivative(f, 1.))
 
@@ -28,10 +31,12 @@ print(approximate_derivative(f, 1.))
 def g(x1, x2):
     return (x1 + 5) * (x2 ** 2)
 
+
 def approximate_gradient(g, x1, x2, eps=1e-3):
     dg_x1 = approximate_derivative(lambda x: g(x, x2), x1, eps)
     dg_x2 = approximate_derivative(lambda x: g(x1, x), x2, eps)
     return dg_x1, dg_x2
+
 
 print(approximate_gradient(g, 2., 3.))
 
@@ -128,7 +133,7 @@ print(x)
 learning_rate = 0.1
 x = tf.Variable(0.0)
 
-optimizer = keras.optimizers.SGD(lr = learning_rate)
+optimizer = keras.optimizers.SGD(lr=learning_rate)
 
 for _ in range(100):
     with tf.GradientTape() as tape:

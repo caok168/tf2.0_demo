@@ -64,9 +64,11 @@ steps_per_epoch = len(x_train_scaled) // batch_size
 optimizer = keras.optimizers.SGD()
 metric = keras.metrics.MeanSquaredError()
 
+
 def random_batch(x, y, batch_size=32):
     idx = np.random.randint(0, len(x), size=batch_size)
     return x[idx], y[idx]
+
 
 model = keras.models.Sequential([
     keras.layers.Dense(30, activation='relu',
