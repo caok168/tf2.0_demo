@@ -53,8 +53,8 @@ model.add(keras.layers.AlphaDropout(rate=0.5))
 model.add(keras.layers.Dense(10, activation="softmax"))
 
 model.compile(loss="sparse_categorical_crossentropy",
-              optimizer = "sgd",
-              metrics = ["accuracy"])
+              optimizer="sgd",
+              metrics=["accuracy"])
 
 
 model.summary()
@@ -70,7 +70,7 @@ output_model_file = os.path.join(logdir,
 callbacks = [
     keras.callbacks.TensorBoard(logdir),
     keras.callbacks.ModelCheckpoint(output_model_file,
-                                    save_best_only = True),
+                                    save_best_only=True),
     keras.callbacks.EarlyStopping(patience=5, min_delta=1e-3),
 ]
 history = model.fit(x_train_scaled, y_train, epochs=10,

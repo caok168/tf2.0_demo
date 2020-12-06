@@ -61,8 +61,8 @@ model = keras.models.Sequential([
 
 # reason for sparse: y->index. y->one_hot->[]
 model.compile(loss="sparse_categorical_crossentropy",
-              optimizer = "sgd",
-              metrics = ["accuracy"])
+              optimizer="sgd",
+              metrics=["accuracy"])
 
 # Tensorboard, earlystopping, ModelCheckpoint
 logdir = './callbacks'
@@ -74,7 +74,7 @@ output_model_file = os.path.join(logdir,
 callbacks = [
     keras.callbacks.TensorBoard(logdir),
     keras.callbacks.ModelCheckpoint(output_model_file,
-                                    save_best_only = True),
+                                    save_best_only=True),
     keras.callbacks.EarlyStopping(patience=5, min_delta=1e-3),
 ]
 history = model.fit(x_train_scaled, y_train, epochs=10,

@@ -63,8 +63,8 @@ model = keras.models.Sequential([
 
 # reason for sparse: y->index. y->one_hot->[]
 model.compile(loss="sparse_categorical_crossentropy",
-              optimizer = "sgd",
-              metrics = ["accuracy"])
+              optimizer="sgd",
+              metrics=["accuracy"])
 
 history = model.fit(x_train_scaled, y_train, epochs=10,
                     validation_data=(x_valid_scaled, y_valid))

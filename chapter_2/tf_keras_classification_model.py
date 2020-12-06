@@ -78,8 +78,8 @@ model = keras.models.Sequential([
 
 # reason for sparse: y->index. y->one_hot->[]
 model.compile(loss="sparse_categorical_crossentropy",
-              optimizer = "sgd",
-              metrics = ["accuracy"])
+              optimizer="sgd",
+              metrics=["accuracy"])
 
 print(model.layers)
 

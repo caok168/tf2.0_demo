@@ -47,9 +47,9 @@ x_test_scaled = scaler.transform(x_test)
 # 2. 定义参数集合
 # 3. 搜索参数
 
-def build_model(hidden_layers = 1,
-                layer_size = 30,
-                learning_rate = 3e-3):
+def build_model(hidden_layers=1,
+                layer_size=30,
+                learning_rate=3e-3):
     model = keras.models.Sequential()
     model.add(keras.layers.Dense(layer_size, activation='relu',
                                  input_shape=x_train.shape[1:]))
@@ -61,13 +61,14 @@ def build_model(hidden_layers = 1,
     model.compile(loss='mse', optimizer=optimizer)
     return model
 
+
 sklearn_model = KerasRegressor(
-    build_fn = build_model)
+    build_fn=build_model)
 callbacks = [keras.callbacks.EarlyStopping(patience=5, min_delta=1e-2)]
 history = sklearn_model.fit(x_train_scaled, y_train,
-                            epochs = 10,
-                            validation_data = (x_valid_scaled, y_valid),
-                            callbacks = callbacks)
+                            epochs=10,
+                            validation_data=(x_valid_scaled, y_valid),
+                            callbacks=callbacks)
 
 
 def plot_learning_curves(history):

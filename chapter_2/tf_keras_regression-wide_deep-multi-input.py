@@ -26,9 +26,9 @@ print(housing.target.shape)
 from sklearn.model_selection import train_test_split
 
 x_train_all, x_test, y_train_all, y_test = train_test_split(
-    housing.data, housing.target, random_state = 7)
+    housing.data, housing.target, random_state=7)
 x_train, x_valid, y_train, y_valid = train_test_split(
-    x_train_all, y_train_all, random_state = 11)
+    x_train_all, y_train_all, random_state=11)
 print(x_train.shape, y_train.shape)
 print(x_valid.shape, y_valid.shape)
 print(x_test.shape, y_test.shape)
@@ -64,17 +64,20 @@ x_test_scaled_deep = x_test_scaled[:, 2:]
 
 history = model.fit([x_train_scaled_wide, x_train_scaled_deep],
                     y_train,
-                    validation_data = (
+                    validation_data=(
                         [x_valid_scaled_wide, x_valid_scaled_deep],
                         y_valid),
-                    epochs = 100,
-                    callbacks = callbacks)
+                    epochs=100,
+                    callbacks=callbacks)
+
 
 def plot_learning_curves(history):
     pd.DataFrame(history.history).plot(figsize=(8, 5))
     plt.grid(True)
     plt.gca().set_ylim(0, 1)
     plt.show()
+
+
 plot_learning_curves(history)
 
 model.evaluate([x_test_scaled_wide, x_test_scaled_deep], y_test)
