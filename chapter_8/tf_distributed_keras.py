@@ -54,46 +54,50 @@ def make_dataset(images, labels, epochs, batch_size, shuffle=True):
     return dataset
 
 
-batch_size = 128
+batch_size_per_replica = 256
+batch_size = batch_size_per_replica * len(logical_gpus)
 epochs = 100
 train_dataset = make_dataset(x_train_scaled, y_train, epochs, batch_size)
 
 
-model = keras.models.Sequential()
-model.add(keras.layers.Conv2D(filters=32,
-                              kernel_size=3,
-                              padding='same',
-                              activation='relu',
-                              input_shape=(28, 28, 1)))
-model.add(keras.layers.Conv2D(filters=32, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.MaxPool2D(pool_size=2))
+strategy = tf.distribute.MirroredStrategy()
 
-model.add(keras.layers.Conv2D(filters=64, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.Conv2D(filters=64, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.MaxPool2D(pool_size=2))
+with strategy.scope():
+    model = keras.models.Sequential()
+    model.add(keras.layers.Conv2D(filters=128,
+                                  kernel_size=3,
+                                  padding='same',
+                                  activation='relu',
+                                  input_shape=(28, 28, 1)))
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.MaxPool2D(pool_size=2))
 
-model.add(keras.layers.Conv2D(filters=128, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.Conv2D(filters=128, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.MaxPool2D(pool_size=2))
+    model.add(keras.layers.Conv2D(filters=256, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.Conv2D(filters=256, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.MaxPool2D(pool_size=2))
 
-model.add(keras.layers.Flatten())
+    model.add(keras.layers.Conv2D(filters=512, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.Conv2D(filters=512, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.MaxPool2D(pool_size=2))
 
-model.add(keras.layers.Dense(128, activation="relu"))
-model.add(keras.layers.Dense(10, activation="softmax"))
+    model.add(keras.layers.Flatten())
 
-model.compile(loss="sparse_categorical_crossentropy",
-              optimizer="sgd",
-              metrics=["accuracy"])
+    model.add(keras.layers.Dense(512, activation="relu"))
+    model.add(keras.layers.Dense(10, activation="softmax"))
+
+    model.compile(loss="sparse_categorical_crossentropy",
+                  optimizer="sgd",
+                  metrics=["accuracy"])
 
 
 model.summary()

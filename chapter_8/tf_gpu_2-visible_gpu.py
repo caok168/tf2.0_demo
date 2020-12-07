@@ -18,6 +18,7 @@ for module in mpl, np, pd, sklearn, tf, keras:
 
 tf.debugging.set_log_device_placement(True)
 gpus = tf.config.experimental.list_physical_devices('GPU')
+tf.config.experimental.set_visible_devices(gpus[0], 'GPU')
 for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 print(len(gpus))

@@ -60,36 +60,39 @@ train_dataset = make_dataset(x_train_scaled, y_train, epochs, batch_size)
 
 
 model = keras.models.Sequential()
-model.add(keras.layers.Conv2D(filters=32,
-                              kernel_size=3,
-                              padding='same',
-                              activation='relu',
-                              input_shape=(28, 28, 1)))
-model.add(keras.layers.Conv2D(filters=32, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.MaxPool2D(pool_size=2))
+with tf.device(logical_gpus[0].name):
+    model.add(keras.layers.Conv2D(filters=32,
+                                  kernel_size=3,
+                                  padding='same',
+                                  activation='relu',
+                                  input_shape=(28, 28, 1)))
+    model.add(keras.layers.Conv2D(filters=32, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.MaxPool2D(pool_size=2))
 
-model.add(keras.layers.Conv2D(filters=64, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.Conv2D(filters=64, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.MaxPool2D(pool_size=2))
+    model.add(keras.layers.Conv2D(filters=64, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.Conv2D(filters=64, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.MaxPool2D(pool_size=2))
 
-model.add(keras.layers.Conv2D(filters=128, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.Conv2D(filters=128, kernel_size=3,
-                              padding='same',
-                              activation='relu'))
-model.add(keras.layers.MaxPool2D(pool_size=2))
+with tf.device(logical_gpus[1].name):
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3,
+                                  padding='same',
+                                  activation='relu'))
+    model.add(keras.layers.MaxPool2D(pool_size=2))
 
-model.add(keras.layers.Flatten())
+    model.add(keras.layers.Flatten())
 
-model.add(keras.layers.Dense(128, activation="relu"))
-model.add(keras.layers.Dense(10, activation="softmax"))
+with tf.device(logical_gpus[2].name):
+    model.add(keras.layers.Dense(128, activation="relu"))
+    model.add(keras.layers.Dense(10, activation="softmax"))
 
 model.compile(loss="sparse_categorical_crossentropy",
               optimizer="sgd",

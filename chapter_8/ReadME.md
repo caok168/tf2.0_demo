@@ -43,13 +43,13 @@
 * 2、适用于一机多卡
 * 3、每个GPU都有网络结果的所有参数，这些参数会被同步
 * 4、数据并行
-* Batch数据切为N份分给各个GPU
-* 梯度聚合然后更新给各个GPU上的参数
+    * Batch数据切为N份分给各个GPU
+    * 梯度聚合然后更新给各个GPU上的参数
 
 #### CentralStorageStrategy（）
 * 1、MirroredStrategy的变种
 * 2、参数不是在每个GPU上，而是存储在一个设备上
-CPU或者唯一的GPU上
+    * CPU或者唯一的GPU上
 * 3、计算是在所有GPU上并行的
 * 除了更新参数的计算之外
 
@@ -67,8 +67,8 @@ CPU或者唯一的GPU上
 * 1、异步分布式
 * 2、更加适用于大规模分布式系统
 * 3、机器分为Parameter Server和worker两类
-* Parameter server负责整合梯度，更新参数
-* Worker负责计算，训练网络
+    * Parameter server负责整合梯度，更新参数
+    * Worker负责计算，训练网络
 
 #### 同步与异步的优劣
 * 1、多机多卡
