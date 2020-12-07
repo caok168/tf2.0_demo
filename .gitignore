@@ -3,3 +3,4 @@ venv
 chapter_2/callbacks
 chapter_2/dnn*
 chapter_4/generate*
+chapter_7/text_generation_checkpoints
